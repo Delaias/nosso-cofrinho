@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nosso Cofrinho</title>
+<style>
+:root {
+  --navy: #0c1225;
+  --panel: #171f38;
+  --panel2: #222b49;
+  --purple: #9061ff;
+  --mint: #59e6b0;
+  --text: #f7f7ff;
+  --muted: #aab1d0;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at top right,
+    #30215d 0%, var(--navy) 55%);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  min-height: 100vh;
+}
+button,input { font: inherit; }
+button { cursor: pointer; }
+.layout { max-width: 1150px; margin: auto; padding: 28px 20px; }
+header,.between { display:flex; justify-content:space-between; align-items:center; gap:15px; }
+.brand { font-size:24px; font-weight:850; letter-spacing:-1px; }
+.brand span { color:var(--mint); }
+.subtitle { color:var(--muted); margin-top:8px; }
+.pill { padding:9px 15px; border:1px solid #414467; border-radius:30px; color:#d5cbff; font-size:13px; }
+.hero {
+  margin:28px 0;
+  padding:35px;
+  border-radius:26px;
+  background:linear-gradient(120deg,#5c35c1,#8056e8 65%,#475cda);
+  position:relative;
+  overflow:hidden;
+}
+.hero::after {
+  content:"✦";
+  position:absolute; right:30px; top:-38px;
+  font-size:190px; opacity:.12;
+}
+.hero small { color:#ddd1ff; font-weight:650; }
+.hero h1 { font-size:clamp(27px,5vw,45px); margin:10px 0; letter-spacing:-1.5px; }
+.hero p { max-width:570px; color:#eee6ff; }
+.primary {
+  background:var(--mint); color:#102337;
+  border:0; padding:13px 19px;
+  border-radius:13px; font-weight:800;
+}
+.secondary {
+  background:#2b3452; color:white;
+  border:1px solid #424e70; padding:12px 16px;
+  border-radius:12px;
+}
+.cards {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+.card,.challenge,.history {
+  background:rgba(23,31,56,.96);
+  border:1px solid #343c5c;
+  border-radius:22px;
+  padding:23px;
+}
+.card .label { color:var(--muted); font-size:14px; }
+.card strong { display:block; font-size:clamp(23px,3vw,32px); margin-top:13px; }
+.green { color:var(--mint); }
+.purple { color:#bca2ff; }
+.challenge { margin-top:20px; }
+h2 { margin:0 0 8px; }
+.small { color:var(--muted); font-size:13px; }
+.bar { background:#343c57; height:12px; border-radius:20px; overflow:hidden; margin:18px 0 10px; }
+.bar > div { background:linear-gradient(90deg,#7754fa,#59e6b0); height:100%; width:0; transition:width .4s; border-radius:20px; }
+.squares {
+  display:grid;
+  grid-template-columns:repeat(8,minmax(0,1fr));
+  gap:10px; margin-top:25px;
+}
+.square {
+  aspect-ratio:1.12;
+  border:1px solid #464b78; border-radius:13px;
+  background:var(--panel2); color:#e6e5ff;
+  font-weight:750;
+  transition:transform .18s, background .18s;
+}
+.square:hover { transform:translateY(-3px); border-color:var(--purple); }
+.square.done {
+  background:linear-gradient(135deg,#197b67,#2bb991);
+  border-color:#65ebbd;
+  color:white;
+}
+.square.done::before { content:"✓ "; }
+.actions { display:flex; flex-wrap:wrap; gap:9px; }
+.history { margin-top:20px; }
+.entry { display:flex; justify-content:space-between; border-bottom:1px solid #343c5c; padding:13px 0; gap:12px; }
+.entry:last-child { border:0; }
+.modal {
+  display:none; position:fixed; inset:0;
+  background:#050817d9; z-index:10;
+  place-items:center; padding:20px;
+}
+.modal.show { display:grid; }
+.dialog {
+  background:#1b2340; border:1px solid #454771;
+  padding:28px; border-radius:24px;
+  width:100%; max-width:450px;
+}
+.dialog label { display:block; margin:16px 0 7px; color:#c8c7e5; }
+.dialog input {
+  width:100%; padding:13px; border-radius:11px;
+  border:1px solid #47516e;
+  background:#111a30; color:white;
+}
+.dialog input:focus { outline:2px solid var(--purple); }
+footer { margin-top:35px; text-align:center; color:#818cac; font-size:12px; }
+@media(max-width:700px) {
+  .layout { padding:18px 14px; }
+  .hero { padding:25px; }
+  .cards { grid-template-columns:1fr 1fr; }
+  .cards .card:last-child { grid-column:span 2; }
+  .squares { grid-template-columns:repeat(5,minmax(0,1fr)); gap:7px; }
+  .square { font-size:12px; border-radius:9px; }
+  .card,.challenge,.history { padding:17px; }
+  .pill { font-size:11px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <header>
+    <div class="brand">✦ Nosso<span>Cofrinho</span></div>
+    <div class="pill">💜 Nossa jornada</div>
+  </header>
+
+  <section class="hero">
+    <small>✨ CADA CONQUISTA COMEÇA COM UM PASSO</small>
+    <h1>Sonhar juntos.<br>Conquistar juntos.</h1>
+    <p>Transforme seus objetivos em pequenas conquistas. Cada quadradinho é mais um passo para realizar seus sonhos.</p>
+    <button class="primary" onclick="openModal()">+ Nova missão</button>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <span class="label">💚 Já economizamos</span>
+      <strong class="green" id="saved">R$ 0</strong>
+    </div>
+    <div class="card">
+      <span class="label">🎯 Nossa meta</span>
+      <strong id="goal">R$ 5.000</strong>
+    </div>
+    <div class="card">
+      <span class="label">✨ Progresso</span>
+      <strong class="purple" id="percent">0%</strong>
+    </div>
+  </section>
+
+  <section class="challenge">
+    <div class="between">
+      <div>
+        <p class="small">NOSSA MISSÃO ATUAL</p>
+        <h2 id="missionTitle">Nossa primeira conquista 💜</h2>
+        <span class="small" id="count"></span>
+      </div>
+      <button class="secondary" onclick="openModal()">Nova missão</button>
+    </div>
+    <div class="bar"><div id="progress"></div></div>
+    <p class="small" id="remaining"></p>
+    <div class="squares" id="squares"></div>
+  </section>
+
+  <section class="history">
+    <div class="between">
+      <h2>📖 Últimas conquistas</h2>
+      <button class="secondary" onclick="undo()">Desfazer</button>
+    </div>
+    <div id="history"></div>
+  </section>
+
+  <footer>Feito para transformar pequenos passos em grandes sonhos. 💜</footer>
+</div>
+
+<div class="modal" id="modal">
+  <div class="dialog">
+    <h2>✨ Criar uma missão</h2>
+    <p class="small">Qual sonho vocês querem realizar?</p>
+    <label>Nome da missão</label>
+    <input id="nameInput" placeholder="Ex.: Nossa viagem dos sonhos">
+    <label>Valor da meta (R$)</label>
+    <input id="goalInput" type="number" min="1" max="1000000" step="1" value="5000">
+    <p class="small">Sugestões: R$ 5.000 · R$ 10.000 · R$ 15.000</p>
+    <div class="actions" style="margin-top:22px">
+      <button class="primary" onclick="createMission()">Criar missão</button>
+      <button class="secondary" onclick="closeModal()">Cancelar</button>
+    </div>
+    <p id="error" class="small" role="alert"></p>
+  </div>
+</div>
+
+<script>
+const KEY = "nosso-cofrinho-v1";
+const money = n => new Intl.NumberFormat("pt-BR", {
+  style:"currency", currency:"BRL", maximumFractionDigits:0
+}).format(n);
+
+function generateValues(goal) {
+  // Soma garantida, inclusive para metas não múltiplas de R$ 10.
+  const values = [];
+  const denominations = [20,50,100,200];
+  let remaining = goal;
+  while (remaining >= 20) {
+    const valid = denominations.filter(v => v <= remaining);
+    const choice = valid[Math.floor(Math.random()*valid.length)];
+    values.push(choice);
+    remaining -= choice;
+  }
+  if (remaining > 0) values.push(remaining);
+  return values.sort(() => Math.random()-.5);
+}
+
+function newMission(name, goal) {
+  return {
+    id: Date.now().toString(),
+    name, goal,
+    values: generateValues(goal),
+    marked: [],
+    history: []
+  };
+}
+
+function load() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(KEY));
+    if (parsed?.missions?.length && parsed.activeId) return parsed;
+  } catch(e) {}
+  const first = newMission("Nossa primeira conquista 💜",5000);
+  return {missions:[first], activeId:first.id};
+}
+
+let state = load();
+const el = id => document.getElementById(id);
+const active = () => state.missions.find(m=>m.id===state.activeId);
+function save() { localStorage.setItem(KEY,JSON.stringify(state)); }
+
+function render() {
+  const m = active();
+  if (!m) return;
+  const total = m.marked.reduce((sum,i)=>sum+m.values[i],0);
+  const pct = Math.min(100,total/m.goal*100);
+  el("missionTitle").textContent=m.name;
+  el("saved").textContent=money(total);
+  el("goal").textContent=money(m.goal);
+  el("percent").textContent=pct.toFixed(1)+"%";
+  el("progress").style.width=pct+"%";
+  el("count").textContent=`${m.marked.length} de ${m.values.length} quadradinhos`;
+  el("remaining").textContent=pct===100
+    ? "🎉 Missão concluída! Vocês conseguiram!"
+    : `Faltam ${money(m.goal-total)} para realizar esse sonho.`;
+  el("squares").innerHTML="";
+  m.values.forEach((value,i)=>{
+    const b=document.createElement("button");
+    b.className="square"+(m.marked.includes(i)?" done":"");
+    b.textContent=money(value);
+    b.setAttribute("aria-pressed",String(m.marked.includes(i)));
+    b.setAttribute("aria-label",`Valor ${money(value)}, ${m.marked.includes(i)?"marcado":"pendente"}`);
+    b.onclick=()=>toggle(i);
+    el("squares").appendChild(b);
+  });
+  const list=el("history");
+  list.innerHTML="";
+  if (!m.history.length) {
+    list.textContent="Sua primeira conquista aparecerá aqui. ✨";
+    return;
+  }
+  m.history.slice(-5).reverse().forEach(item=>{
+    const row=document.createElement("div");
+    row.className="entry";
+    const label=document.createElement("span");
+    label.textContent=item.action==="add"?"✅ Valor marcado":"↩️ Valor desmarcado";
+    const detail=document.createElement("strong");
+    detail.textContent=money(item.value);
+    row.append(label,detail);
+    list.appendChild(row);
+  });
+}
+
+function toggle(i) {
+  const m=active();
+  const exists=m.marked.includes(i);
+  if(exists) m.marked=m.marked.filter(x=>x!==i);
+  else m.marked.push(i);
+  m.history.push({index:i,value:m.values[i],action:exists?"remove":"add",date:new Date().toISOString()});
+  save(); render();
+}
+
+function undo() {
+  const m=active();
+  const last=m.history.pop();
+  if (!last) return;
+  if(last.action==="add") m.marked=m.marked.filter(x=>x!==last.index);
+  else if(!m.marked.includes(last.index)) m.marked.push(last.index);
+  save(); render();
+}
+
+function openModal() { el("error").textContent=""; el("modal").classList.add("show"); }
+function closeModal() { el("modal").classList.remove("show"); }
+
+function createMission() {
+  const name=el("nameInput").value.trim();
+  const goal=Number(el("goalInput").value);
+  if(!name || !Number.isSafeInteger(goal) || goal<1 || goal>1000000) {
+    el("error").textContent="Informe um nome e um valor inteiro entre R$ 1 e R$ 1.000.000.";
+    return;
+  }
+  const m=newMission(name,goal);
+  state.missions.push(m);
+  state.activeId=m.id;
+  save(); closeModal(); render();
+}
+
+render();
+</script>
+</body>
+</html>
