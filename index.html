@@ -28,8 +28,8 @@ button,input { font: inherit; }
 button { cursor: pointer; }
 .layout { max-width: 1150px; margin: auto; padding: 28px 20px; }
 header,.between { display:flex; justify-content:space-between; align-items:center; gap:15px; }
-.brand { font-size:24px; font-weight:850; letter-spacing:-1px; }
-.brand span { color:var(--mint); }
+.brand { width:78px; height:62px; display:flex; align-items:center; }
+.brand img { width:100%; height:100%; object-fit:contain; }
 .subtitle { color:var(--muted); margin-top:8px; }
 .pill { padding:9px 15px; border:1px solid #414467; border-radius:30px; color:#d5cbff; font-size:13px; }
 .hero {
@@ -39,12 +39,13 @@ header,.between { display:flex; justify-content:space-between; align-items:cente
   background:linear-gradient(120deg,#5c35c1,#8056e8 65%,#475cda);
   position:relative;
   overflow:hidden;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(220px,340px);
+  align-items:center;
+  gap:26px;
 }
-.hero::after {
-  content:"✦";
-  position:absolute; right:30px; top:-38px;
-  font-size:190px; opacity:.12;
-}
+.hero-copy { position:relative; z-index:1; }
+.hero-logo { width:100%; aspect-ratio:1; object-fit:contain; filter:drop-shadow(0 22px 28px #23114b99); }
 .hero small { color:#ddd1ff; font-weight:650; }
 .hero h1 { font-size:clamp(27px,5vw,45px); margin:10px 0; letter-spacing:-1.5px; }
 .hero p { max-width:570px; color:#eee6ff; }
@@ -123,6 +124,8 @@ footer { margin-top:35px; text-align:center; color:#818cac; font-size:12px; }
 @media(max-width:700px) {
   .layout { padding:18px 14px; }
   .hero { padding:25px; }
+  .hero { grid-template-columns:1fr; }
+  .hero-logo { width:min(78vw,300px); margin:auto; }
   .cards { grid-template-columns:1fr 1fr; }
   .cards .card:last-child { grid-column:span 2; }
   .squares { grid-template-columns:repeat(5,minmax(0,1fr)); gap:7px; }
@@ -135,15 +138,18 @@ footer { margin-top:35px; text-align:center; color:#818cac; font-size:12px; }
 <body>
 <div class="layout">
   <header>
-    <div class="brand">✦ Nosso<span>Cofrinho</span></div>
+    <a class="brand" href="#" aria-label="Nosso Cofrinho — início"><img src="public/images/cofrinho-logo.svg" alt="Nosso Cofrinho"></a>
     <div class="pill">💜 Nossa jornada</div>
   </header>
 
   <section class="hero">
-    <small>✨ CADA CONQUISTA COMEÇA COM UM PASSO</small>
-    <h1>Sonhar juntos.<br>Conquistar juntos.</h1>
-    <p>Transforme seus objetivos em pequenas conquistas. Cada quadradinho é mais um passo para realizar seus sonhos.</p>
-    <button class="primary" onclick="openModal()">+ Nova missão</button>
+    <div class="hero-copy">
+      <small>✨ CADA CONQUISTA COMEÇA COM UM PASSO</small>
+      <h1>Sonhar juntos.<br>Conquistar juntos.</h1>
+      <p>Transforme seus objetivos em pequenas conquistas. Cada quadradinho é mais um passo para realizar seus sonhos.</p>
+      <button class="primary" onclick="openModal()">+ Nova missão</button>
+    </div>
+    <img class="hero-logo" src="public/images/cofrinho-logo.svg" alt="" aria-hidden="true">
   </section>
 
   <section class="cards">
